@@ -86,15 +86,26 @@ namespace Zoka.X2O
 		private static object								CreateObjectByNode(XmlNode _node)
 		{
 			var type_attr = _node.Attributes["type"];
+			IEnumerable<Type> tgt_types = null;
 
-			var tgt_types = from a in AppDomain.CurrentDomain.GetAssemblies()
-				from t in a.GetTypes()
-				where t.FullName == type_attr.Value || t.Name == type_attr.Value || t.AssemblyQualifiedName == type_attr.Value
-				select t;
+			if (type_attr != null)
+			{
+				tgt_types = from a in AppDomain.CurrentDomain.GetAssemblies()
+							from t in a.GetTypes()
+							where t.FullName == type_attr.Value || t.Name == type_attr.Value || t.AssemblyQualifiedName == type_attr.Value
+							select t;
+			}
+
+			if (tgt_types == null || !tgt_types.Any())
+			{
+				tgt_types = from a in AppDomain.CurrentDomain.GetAssemblies()
+							from t in a.GetTypes()
+							where t.FullName == _node.Name || t.Name == _node.Name
+							select t;
+			}
 
 			if (tgt_types == null || !tgt_types.Any())
 				return null;
-
 
 			var inst = Activator.CreateInstance(tgt_types.First());
 			return inst;
