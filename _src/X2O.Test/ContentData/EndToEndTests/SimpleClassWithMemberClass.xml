@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SimpleClassWithMemberClass>
+	<A>10</A>
+	<B>
+		<X>5</X>
+	</B>
+</SimpleClassWithMemberClass>
