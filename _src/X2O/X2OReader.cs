@@ -87,7 +87,7 @@ namespace Zoka.X2O
 				Type member_type = GetTypeOfMember(member_info);
 
 				// now find out, whether it is value or complex type
-				if (member_type.IsValueType)
+				if (member_type.IsValueType || member_type.Equals(typeof(string)))
 				{
 					var xval = _node.ChildNodes[0].Value;
 					var tgt_type_val = Convert.ChangeType(xval, member_type);

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SimpleClassWithMemberInterface>
+	<C>7</C>
+	<I type="SimpleInterfaceImpl2">
+		<D>Test text!</D>
+		<F>x</F>
+	</I>
+</SimpleClassWithMemberInterface>
