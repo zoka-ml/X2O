@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Zoka.X2O.Test
@@ -37,11 +38,25 @@ namespace Zoka.X2O.Test
 		public SimpleInterface I { get; set; }
 	}
 
+	public class ClassWithEnumerationOfInts
+	{
+		public string G;
+		public IEnumerable<int> H { get; set; }
+	}
+
 	[TestClass]
 	public class EndToEndTests
 	{
 		[TestMethod]
-		public void GivenSimplestXml_ItDeserializeCorrectly()
+		public void GivenXmlWithIntOnly_ItDeserializesCorrectly()
+		{
+			var i = (int)X2OReader.ReadFromFile("ContentData\\EndToEndTests\\OnlyInt.xml");
+
+			Assert.AreEqual(2, i);
+		}
+
+		[TestMethod]
+		public void GivenXmlWithSimpleClass_ItDeserializesCorrectly()
 		{
 			var simple_class = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\SimpleClass.xml") as SimpleClass;
 
@@ -50,7 +65,7 @@ namespace Zoka.X2O.Test
 		}
 
 		[TestMethod]
-		public void GivenSimplestXmlWithoutTypeDefinition_ItDeserializeCorrectly()
+		public void GivenXmlWithSimpleClassWithoutTypeSpecification_ItDeserializesCorrectly()
 		{
 			var simple_class = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\SimpleClassWithoutClassDefinition.xml") as SimpleClass;
 
@@ -59,7 +74,7 @@ namespace Zoka.X2O.Test
 		}
 
 		[TestMethod]
-		public void GivenSimpleXmlWithAnotherClassAsMember_ItDeserializeCorrectly()
+		public void GivenXmlWithClassWithAnotherClassAsMember_ItDeserializesCorrectly()
 		{
 			var simple_class = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\SimpleClassWithMemberClass.xml") as SimpleClassWithMemberClass;
 
@@ -70,7 +85,7 @@ namespace Zoka.X2O.Test
 		}
 
 		[TestMethod]
-		public void GivenSimpleXmlWithInterfaceAsMember_ItDeserializeCorrectly()
+		public void GivenXmlWithClassWithInterfaceAsMember_ItDeserializesCorrectly()
 		{
 			var simple_class = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\SimpleClassWithInterfaceMember.xml") as SimpleClassWithMemberInterface;
 
@@ -80,6 +95,22 @@ namespace Zoka.X2O.Test
 			Assert.IsInstanceOfType(simple_class.I, typeof(SimpleInterfaceImpl2), "Suppossed the deserialized value to be of SimpleInterfaceImpl2 type");
 			Assert.AreEqual("Test text!", simple_class.I.D, "SimpleClassWithMemberInterface.I.D should be \"Test text!\"");
 			Assert.AreEqual('x', (simple_class.I as SimpleInterfaceImpl2).F, "SimpleClassWithMemberInterface.I.F should be 'x'");
+		}
+
+		[TestMethod]
+		public void GivenXmlOfClassWithEnumerationOfInts_ItDesrializesCorrectly()
+		{
+			var result = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\ClassWithEnumerationOfInts.xml") as ClassWithEnumerationOfInts;
+
+			Assert.IsNotNull(result, "ClassWithEnumerationOfInts has not deserialized");
+			Assert.AreEqual("Test text!", result.G);
+			Assert.IsNotNull(result.H, "ClassWithEnumerationOfInts.H should not be null");
+			var enumerator = result.H.GetEnumerator();
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.AreEqual(10, enumerator.Current);
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.AreEqual(11, enumerator.Current);
+			Assert.IsFalse(enumerator.MoveNext());
 		}
 	}
 }

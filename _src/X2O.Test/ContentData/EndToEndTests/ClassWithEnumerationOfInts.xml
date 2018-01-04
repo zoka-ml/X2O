@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ClassWithEnumerationOfInts>
+	<G>Test text!</G>
+	<H type="List`1[int]">
+		<Item>10</Item>
+		<Item>11</Item>
+	</H>
+</ClassWithEnumerationOfInts>
