@@ -112,5 +112,24 @@ namespace Zoka.X2O.Test
 			Assert.AreEqual(11, enumerator.Current);
 			Assert.IsFalse(enumerator.MoveNext());
 		}
+
+		[TestMethod]
+		public void GivenXmlOfEnumerableOfInterface_ItDeserializesCorrectly()
+		{
+			var result = X2OReader.ReadFromFile<IEnumerable<SimpleInterface>>("ContentData\\EndToEndTests\\EnumerableOfInterfaces.xml");
+
+			Assert.IsNotNull(result);
+			Assert.IsInstanceOfType(result, typeof(IEnumerable<SimpleInterface>));
+			var enumerator = result.GetEnumerator();
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.IsInstanceOfType(enumerator.Current, typeof(SimpleInterfaceImpl1));
+			Assert.AreEqual("Test text 1", (enumerator.Current as SimpleInterfaceImpl1).D);
+			Assert.AreEqual(15, (enumerator.Current as SimpleInterfaceImpl1).E);
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.IsInstanceOfType(enumerator.Current, typeof(SimpleInterfaceImpl2));
+			Assert.AreEqual("Test text 2", (enumerator.Current as SimpleInterfaceImpl2).D);
+			Assert.AreEqual('x', (enumerator.Current as SimpleInterfaceImpl2).F);
+			Assert.IsFalse(enumerator.MoveNext());
+		}
 	}
 }

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<EnumerableOfSimpleInterface>
+	<Item type="SimpleInterfaceImpl1">
+		<D>Test text 1</D>
+		<E>15</E>
+	</Item>
+	<Item type="SimpleInterfaceImpl2">
+		<D>Test text 2</D>
+		<F>x</F>
+	</Item>
+</EnumerableOfSimpleInterface>

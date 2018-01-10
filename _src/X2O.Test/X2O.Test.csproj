@@ -66,6 +66,9 @@
     <Content Include="ContentData\EndToEndTests\OnlyInt.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ContentData\EndToEndTests\EnumerableOfInterfaces.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ContentData\EndToEndTests\SimpleClassWithMemberClass.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
