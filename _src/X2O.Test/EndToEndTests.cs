@@ -131,5 +131,18 @@ namespace Zoka.X2O.Test
 			Assert.AreEqual('x', (enumerator.Current as SimpleInterfaceImpl2).F);
 			Assert.IsFalse(enumerator.MoveNext());
 		}
+
+		[TestMethod]
+		public void GivenXmlWithPartiallyExternalConfig_ItDeserializesCorrectly()
+		{
+			var result = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\ClassWithPartiallyExternalConfig.xml") as SimpleClassWithMemberInterface;
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(7, result.C);
+			Assert.IsNotNull(result.I);
+			Assert.IsInstanceOfType(result.I, typeof(SimpleInterfaceImpl2));
+			Assert.AreEqual("Test text!", (result.I as SimpleInterfaceImpl2).D);
+			Assert.AreEqual('x', (result.I as SimpleInterfaceImpl2).F);
+		}
 	}
 }

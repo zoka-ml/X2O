@@ -110,6 +110,5 @@ namespace Zoka.X2O
 				throw new  InvalidOperationException("Multiple types found");
 			return tgt_types.First();
 		}
-
 	}
 }
