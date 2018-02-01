@@ -72,7 +72,7 @@ namespace Zoka.X2O.X2OElementsProcessors
 			{
 				// generic dictionary like Dictionary<T1, T2>
 				var key_type = _declared_type.GenericTypeArguments[0];
-				var value_type = _declared_type.GenericTypeArguments[0];
+				var value_type = _declared_type.GenericTypeArguments[1];
 				var dict_type = typeof(Dictionary<,>).MakeGenericType(key_type, value_type);
 				if (dict_type.IsAssignableFrom(_declared_type))
 				{

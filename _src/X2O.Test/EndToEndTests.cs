@@ -144,5 +144,17 @@ namespace Zoka.X2O.Test
 			Assert.AreEqual("Test text!", (result.I as SimpleInterfaceImpl2).D);
 			Assert.AreEqual('x', (result.I as SimpleInterfaceImpl2).F);
 		}
+
+		[TestMethod]
+		public void GivenXmlWithDictionary_String_SimpleClass_ItDeserializesCorrectly()
+		{
+			var result = X2OReader.ReadFromFile<Dictionary<string, SimpleClass>>("ContentData\\EndToEndTests\\Dictionary_String_SimpleClass.xml");
+
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result["ItemA"]);
+			Assert.AreEqual(10, result["ItemA"].X);
+			Assert.IsNotNull(result["ItemB"]);
+			Assert.AreEqual(20, result["ItemB"].X);
+		}
 	}
 }

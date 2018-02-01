@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+	<Item>
+		<Key>ItemA</Key>
+		<Value>
+			<X>10</X>
+		</Value>
+	</Item>
+	<Item>
+		<Key>ItemB</Key>
+		<Value>
+			<X>20</X>
+		</Value>
+	</Item>
+</Dictionary>

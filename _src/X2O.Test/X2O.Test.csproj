@@ -75,6 +75,9 @@
     <Content Include="ContentData\EndToEndTests\PartiallyExternalConfig.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ContentData\EndToEndTests\Dictionary_String_SimpleClass.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ContentData\EndToEndTests\SimpleClassWithMemberClass.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
