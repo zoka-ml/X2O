@@ -23,6 +23,7 @@ namespace Zoka.X2O
 		public static X2OConfig								WithDefaultElementsProcessors()
 		{
 			var cfg = new X2OConfig(new X2OElementsProcessors.X2OComplexObjectProcessor(),
+									new X2OElementsProcessors.X2ODictionaryProcessor(),
 									new X2OElementsProcessors.X2OEnumerableProcessor(),
 									new X2OElementsProcessors.X2OValueProcessor(),
 									new X2OElementsProcessors.X2OExternalFileProcessor()

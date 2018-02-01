@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Helpers\MemberInfoExtensions.cs" />
     <Compile Include="X2OElementsProcessors\IX2OElementsProcessors.cs" />
+    <Compile Include="X2OElementsProcessors\X2ODictionaryProcessor.cs" />
     <Compile Include="X2OElementsProcessors\X2OEnumerableProcessor.cs" />
     <Compile Include="X2OElementsProcessors\X2OComplexObjectProcessor.cs" />
     <Compile Include="X2OElementsProcessors\X2OExternalFileProcessor.cs" />
