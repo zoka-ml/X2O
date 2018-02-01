@@ -37,13 +37,13 @@ namespace Zoka.X2O.X2OElementsProcessors
 		/// If successful, it goes through all the child nodes of _parent_element and deserializes the objects, which are than add
 		/// using the AddAction.
 		/// </remarks>
-		public virtual object								ProcessElements(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public virtual object								ProcessElements(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
 			// if the declared type is not the IEnumerable, we cannot help here
-			if (!typeof(IEnumerable).IsAssignableFrom(_declared_type))
+			if (!typeof(IEnumerable).IsAssignableFrom(_target_type))
 				return null;
 
-			var enumerable_info = CreateEnumerable(_parent_element, _declared_type, _config);
+			var enumerable_info = CreateEnumerable(_parent_element, _target_type, _config);
 			if (!enumerable_info.HasValue)
 				return null;
 
@@ -62,17 +62,17 @@ namespace Zoka.X2O.X2OElementsProcessors
 		/// In this implementation, it is able to create only the List&lt;object&gt; or List&lt;T&gt; types, according to the _declared_type and
 		/// only in cases, that the _declared_type is convertible into these Lists.
 		/// </summary>
-		public virtual EnumerableInfo?						CreateEnumerable(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public virtual EnumerableInfo?						CreateEnumerable(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
 			Action<IEnumerable, object> add_action = (l, i) => l.GetType().GetMethod("Add").Invoke(l, new[] { i });
 
 			// find if it is generic, find the generic type, create list of that type, and try if it can convert into declared type
-			if (_declared_type.IsGenericType && _declared_type.GenericTypeArguments.Length == 1)
+			if (_target_type.IsGenericType && _target_type.GenericTypeArguments.Length == 1)
 			{
 				// it is generic type, like List<T> or IEnumerable<T>
-				var item_type = _declared_type.GenericTypeArguments[0];
+				var item_type = _target_type.GenericTypeArguments[0];
 				var tgt_type = typeof(List<>).MakeGenericType(item_type);
-				if (_declared_type.IsAssignableFrom(tgt_type))
+				if (_target_type.IsAssignableFrom(tgt_type))
 				{
 					try
 					{
@@ -87,7 +87,7 @@ namespace Zoka.X2O.X2OElementsProcessors
 			}
 			else
 			{
-				if (_declared_type.IsAssignableFrom(typeof(List<object>)))
+				if (_target_type.IsAssignableFrom(typeof(List<object>)))
 				{
 					try
 					{

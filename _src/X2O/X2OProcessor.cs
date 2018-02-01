@@ -59,9 +59,23 @@ namespace Zoka.X2O
 		/// </returns>
 		public virtual object								ProcessElements(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
 		{
+			Type tgt_type = _declared_type;
+
+			// consider target type
+			// firstly we will look for the type atribute
+			var type_attr = _parent_element.Attributes["type"];
+			if (type_attr != null)
+			{
+				tgt_type = GetTypeByName(type_attr.Value, _config);
+				if (tgt_type == null)
+					throw new ArgumentException($"Type name specified in type attribute ({type_attr.Value}) couldn't been resolved.");
+				if (!_declared_type.IsAssignableFrom(tgt_type))
+					throw new ArgumentException($"Type name specified in type attribute ({type_attr.Value}, resolved as {tgt_type.FullName}) cannot be converted into declared type ({_declared_type.FullName}).");
+			}
+
 			foreach(var processor in ElementsProcessors.Reverse())
 			{
-				var result = processor.ProcessElements(_parent_element, _declared_type, _config);
+				var result = processor.ProcessElements(_parent_element, tgt_type, _config);
 				if (result != null)
 					return result;
 			}
@@ -73,18 +87,18 @@ namespace Zoka.X2O
 		/// Will analyse the passed element (which is root) and returns the type which can be used as _declared_type
 		/// when calling the ProcessElements function for the root node of Xml.
 		/// </summary>
-		public virtual Type									GetTypeOfRoot(XmlElement _element)
+		public virtual Type									GetTypeOfRoot(XmlElement _element, X2OConfig _config)
 		{
 			var type_attr = _element.Attributes["type"];
 			Type tgt_type = null;
 			if (type_attr != null)
 			{
-				tgt_type = GetTypeByName(type_attr.Value);
+				tgt_type = GetTypeByName(type_attr.Value, _config);
 			}
 
 			if (tgt_type == null)
 			{
-				tgt_type = GetTypeByName(_element.Name);
+				tgt_type = GetTypeByName(_element.Name, _config);
 			}
 
 			return tgt_type;
@@ -96,7 +110,7 @@ namespace Zoka.X2O
 		/// It goes through the full list of types in all loaded assemblies and tries to find the best match - only single is allowed.
 		/// </summary>
 		/// <exception cref="InvalidOperationException">In case, there is more than one suitable type.</exception>
-		public virtual Type									GetTypeByName(string _type_name)
+		public virtual Type									GetTypeByName(string _type_name, X2OConfig _config)
 		{
 			// first try by type attribute
 			var tgt_types = from a in AppDomain.CurrentDomain.GetAssemblies()
@@ -104,11 +118,20 @@ namespace Zoka.X2O
 							where t.FullName == _type_name || t.Name == _type_name || t.AssemblyQualifiedName == _type_name
 							select t;
 
-			if (tgt_types == null || !tgt_types.Any())
-				return null;
+			if (tgt_types.Count() == 1)
+				return tgt_types.First();
 			if (tgt_types.Count() > 1)
-				throw new  InvalidOperationException("Multiple types found");
-			return tgt_types.First();
+				throw new InvalidOperationException($"Multiple types has been found for resolving the type name \"{_type_name}\"");
+			// no type found, so look within type resolvers
+			foreach(var type_resolver in _config.TypeResolvers)
+			{
+				var resolved_type = type_resolver(_type_name);
+				if (resolved_type != null)
+					return resolved_type;
+			}
+
+			// no type found
+			return null;
 		}
 	}
 }

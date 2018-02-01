@@ -18,7 +18,7 @@ namespace Zoka.X2O
 		/// <returns>The instance of the object according to the type read from XML file</returns>
 		public static object								ReadFromFile(string _filename)
 		{
-			var cfg = X2OConfig.WithDefaultElementsProcessors().UsingExternalConfigSearchPath(new System.IO.FileInfo(_filename).DirectoryName);
+			var cfg = X2OConfig.DefaultConfig().UsingExternalConfigSearchPath(new System.IO.FileInfo(_filename).DirectoryName);
 			var result = ReadFromFile(_filename, cfg);
 
 			return result; 
@@ -31,7 +31,7 @@ namespace Zoka.X2O
 		public static object								ReadFromFile(string _filename, X2OConfig _config)
 		{
 			var root_node = GetXmlRootElementFromFile(_filename);
-			var root_type = _config.Processor.GetTypeOfRoot(root_node);
+			var root_type = _config.Processor.GetTypeOfRoot(root_node, _config);
 			var result = ReadFromXmlElement(root_node, root_type, _config);
 
 			return result;
@@ -45,7 +45,7 @@ namespace Zoka.X2O
 		/// <returns>The instance of the object according to the type read from XML file</returns>
 		public static T										ReadFromFile<T>(string _filename)
 		{
-			var cfg = X2OConfig.WithDefaultElementsProcessors().UsingExternalConfigSearchPath(new System.IO.FileInfo(_filename).DirectoryName);
+			var cfg = X2OConfig.DefaultConfig().UsingExternalConfigSearchPath(new System.IO.FileInfo(_filename).DirectoryName);
 			var result = ReadFromFile<T>(_filename, cfg);
 
 			return (T)result;
@@ -72,12 +72,12 @@ namespace Zoka.X2O
 		/// Will read the XML file and returns instance of the read object completely initialized with values from XML file.
 		/// </summary>
 		/// <param name="_element">Usually the root node of the XML document to be deserialized and returned as object instance.</param>
-		/// <param name="_declared_type">The type which is the suppossed the be the result (or convertible into this type)</param>
+		/// <param name="_target_type">The type which is the suppossed the be the result (or convertible into this type)</param>
 		/// <param name="_config">Configurtion object of X2OReader</param>
 		/// <returns>The instance of the object according to the type read from XML file</returns>
-		public static object								ReadFromXmlElement(XmlElement _element, Type _declared_type, X2OConfig _config)
+		public static object								ReadFromXmlElement(XmlElement _element, Type _target_type, X2OConfig _config)
 		{
-			var result = _config.Processor.ProcessElements(_element, _declared_type, _config);
+			var result = _config.Processor.ProcessElements(_element, _target_type, _config);
 			return result;
 		}
 

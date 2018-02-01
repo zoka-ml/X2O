@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+	<Item>
+		<Key>Item1</Key>
+		<Value type="SimpleClass">
+			<X>10</X>
+		</Value>
+	</Item>
+	<Item>
+		<Key>Item2</Key>
+		<Value type="ClassWithEnumerationOfInts">
+			<G>Test text</G>
+			<H>
+				<Item>20</Item>
+				<Item>21</Item>
+			</H>
+		</Value>
+	</Item>
+	<Item>
+		<Key>Item3</Key>
+		<Value type="Int32">
+			30
+		</Value>
+	</Item>
+</Dictionary>

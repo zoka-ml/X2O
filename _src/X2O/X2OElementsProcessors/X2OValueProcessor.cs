@@ -14,13 +14,13 @@ namespace Zoka.X2O.X2OElementsProcessors
 	{
 		/// <inheritdoc />
 		/// <remarks>The function uses Convert class functionality to convert from XmlValue of child nodes into the target type.</remarks>
-		public object ProcessElements(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public object ProcessElements(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
-			if (!_declared_type.IsValueType && !_declared_type.Equals(typeof(string)))
+			if (!_target_type.IsValueType && !_target_type.Equals(typeof(string)))
 				return null;
 
 			var xval = _parent_element.ChildNodes[0].Value;
-			var tgt_type_val = Convert.ChangeType(xval, _declared_type);
+			var tgt_type_val = Convert.ChangeType(xval, _target_type);
 			return tgt_type_val;
 		}
 	}

@@ -156,5 +156,52 @@ namespace Zoka.X2O.Test
 			Assert.IsNotNull(result["ItemB"]);
 			Assert.AreEqual(20, result["ItemB"].X);
 		}
+
+		[TestMethod]
+		public void GivenXmlWithDictionary_String_Object_ItDeserializesCorrectly()
+		{
+			var result = X2OReader.ReadFromFile<Dictionary<string, object>>("ContentData\\EndToEndTests\\Dictionary_String_Object.xml");
+
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result["Item1"]);
+			Assert.IsInstanceOfType(result["Item1"], typeof(SimpleClass));
+			Assert.AreEqual(10, (result["Item1"] as SimpleClass).X);
+			Assert.IsNotNull(result["Item2"]);
+			Assert.IsInstanceOfType(result["Item2"], typeof(ClassWithEnumerationOfInts));
+			var item2 = result["Item2"] as ClassWithEnumerationOfInts;
+			Assert.AreEqual("Test text", item2.G);
+			Assert.IsNotNull(item2.H);
+			var enumerator = item2.H.GetEnumerator();
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.AreEqual(20, enumerator.Current);
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.AreEqual(21, enumerator.Current);
+			Assert.IsFalse(enumerator.MoveNext());
+			Assert.IsNotNull(result["Item3"]);
+			Assert.IsInstanceOfType(result["Item3"], typeof(int));
+			Assert.AreEqual(30, result["Item3"]);
+		}
+
+		/// <remarks>
+		/// Aim of this test is to test, that type name can be specified simply, like "int" instead of full C# name "Int32". 
+		/// It also checks, that generic names may be specified simply. Normally, the name of the List&lt;int&gt; cannot be specified in Xml because:
+		///   - characters &lt; &gt; need to be escaped (too complicated)
+		///   - and this type cannot be find easily, because, the type name is List`1[Int32] (also too complicated to write in xml)
+		/// We assume, that it would be much more easier to write type like List[int] and it could be found.
+		/// </remarks>
+		[TestMethod]
+		public void GivenXmlWithEnumerableOfObjects_UsingSimpleTypeNames_ItDeserializesCorrectly()
+		{
+			var result = X2OReader.ReadFromFile("ContentData\\EndToEndTests\\EnumerableOfObjects_UsingSimpleTypeNames.xml") as IEnumerable<object>;
+
+			Assert.IsNotNull(result);
+			var enumerator = result.GetEnumerator();
+			Assert.IsTrue(enumerator.MoveNext());
+			Assert.IsInstanceOfType(enumerator.Current, typeof(int));
+			var val1 = (int)enumerator.Current;
+			Assert.AreEqual(15, val1);
+			Assert.IsFalse(enumerator.MoveNext());
+		}
+
 	}
 }

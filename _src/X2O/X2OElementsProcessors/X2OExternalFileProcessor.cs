@@ -18,7 +18,7 @@ namespace Zoka.X2O.X2OElementsProcessors
 		/// The function looks for the fromFile attribute, and if found, and there are no children it uses the X2OReader to 
 		/// read this file and desrialize its content, which is then returned as the value of this element.
 		/// </remarks>
-		public object ProcessElements(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public object ProcessElements(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
 			var external_config_attr = _parent_element.Attributes["fromFile"];
 			if (external_config_attr != null && !_parent_element.HasChildNodes)

@@ -28,13 +28,13 @@ namespace Zoka.X2O.X2OElementsProcessors
 		/// <inheritdoc />
 		/// <remarks>
 		/// </remarks>
-		public virtual object								ProcessElements(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public virtual object								ProcessElements(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
 			// if the declared type is not the IDictionary, we cannot help here
-			if (!typeof(IDictionary).IsAssignableFrom(_declared_type))
+			if (!typeof(IDictionary).IsAssignableFrom(_target_type))
 				return null;
 
-			var dictionary_info = CreateDictionary(_parent_element, _declared_type, _config);
+			var dictionary_info = CreateDictionary(_parent_element, _target_type, _config);
 			if (!dictionary_info.HasValue)
 				return null;
 
@@ -66,19 +66,19 @@ namespace Zoka.X2O.X2OElementsProcessors
 		}
 
 		/// <summary></summary>
-		public virtual DictionaryInfo?							CreateDictionary(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public virtual DictionaryInfo?							CreateDictionary(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
-			if (_declared_type.IsGenericType && _declared_type.GenericTypeArguments.Length == 2)
+			if (_target_type.IsGenericType && _target_type.GenericTypeArguments.Length == 2)
 			{
 				// generic dictionary like Dictionary<T1, T2>
-				var key_type = _declared_type.GenericTypeArguments[0];
-				var value_type = _declared_type.GenericTypeArguments[1];
+				var key_type = _target_type.GenericTypeArguments[0];
+				var value_type = _target_type.GenericTypeArguments[1];
 				var dict_type = typeof(Dictionary<,>).MakeGenericType(key_type, value_type);
-				if (dict_type.IsAssignableFrom(_declared_type))
+				if (dict_type.IsAssignableFrom(_target_type))
 				{
 					try
 					{
-						var dict = Activator.CreateInstance(_declared_type) as IDictionary;
+						var dict = Activator.CreateInstance(_target_type) as IDictionary;
 						// declared type is derived from Dictionary<T1,T2> and we guessed the type parameters correctly
 						var dict_info = new DictionaryInfo() {
 							Dictionary = dict,

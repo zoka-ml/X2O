@@ -63,6 +63,12 @@
     <Content Include="ContentData\EndToEndTests\ClassWithEnumerationOfInts.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ContentData\EndToEndTests\Dictionary_String_Object.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ContentData\EndToEndTests\EnumerableOfObjects_UsingSimpleTypeNames.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ContentData\EndToEndTests\OnlyInt.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

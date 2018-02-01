@@ -14,9 +14,9 @@ namespace Zoka.X2O.X2OElementsProcessors
 	public class X2OComplexObjectProcessor : IX2OElementsProcessor
 	{
 		/// <inheritdoc />
-		public virtual object								ProcessElements(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public virtual object								ProcessElements(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
-			var inst = CreateInstance(_parent_element, _declared_type, _config);
+			var inst = CreateInstance(_parent_element, _target_type, _config);
 			if (inst == null)
 				return null;
 
@@ -36,30 +36,18 @@ namespace Zoka.X2O.X2OElementsProcessors
 		/// child nodes are to be read.
 		/// </summary>
 		/// <returns>The instance of the target object or null, if the processor doesn't know how to read such type of object.</returns>
-		public virtual object								CreateInstance(XmlElement _parent_element, Type _declared_type, X2OConfig _config)
+		public virtual object								CreateInstance(XmlElement _parent_element, Type _target_type, X2OConfig _config)
 		{
-			// first use the type in the type attribute of element, if there is one
-			var type_attr = _parent_element.Attributes["type"];
-			if (type_attr != null)
-			{
-				var type = _config.Processor.GetTypeByName(type_attr.Value);
-				try
-				{
-					return Activator.CreateInstance(type);
-				}
-				catch { }
-			}
-
-			// otherwise try the declared type
+			// try the declared type
 			try
 			{
-				return Activator.CreateInstance(_declared_type);
+				return Activator.CreateInstance(_target_type);
 			}
 			catch { }
 
 			// or in some cases it may happen, that the node has the name of the type
 			{
-				var type = _config.Processor.GetTypeByName(_parent_element.Name);
+				var type = _config.Processor.GetTypeByName(_parent_element.Name, _config);
 				try
 				{
 					return Activator.CreateInstance(type);
